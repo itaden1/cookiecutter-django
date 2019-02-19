@@ -1,0 +1,25 @@
+{% raw %}
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+  <% for (var css in htmlWebpackPlugin.files.css) { %>
+    <link href="{% static 'vue/hello-world/dist<%= htmlWebpackPlugin.files.css[css] %>' %}" rel="stylesheet">
+<% } %>
+{% endblock %}
+{% block content %}
+    <noscript>
+        <strong>We're sorry but this app doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+
+    <div id="app"></div>
+{% endblock %}
+
+{% block javascript %}
+<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+  <script src="{% static 'vue/hello-world/dist<%= htmlWebpackPlugin.files.chunks[chunk].entry %>' %}"></script>
+<% } %>
+{% endblock %}
+{% endraw %}
