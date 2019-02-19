@@ -24,7 +24,7 @@
     "gulp-util": "^3.0.7",
     {% if cookiecutter.custom_bootstrap_compilation == 'y' -%}
     "jquery": "3.3.1",
-    "popper.js": "1.14.3",
+    "popper.js": "1.14.3"
     {% endif -%}
     {%- endif %}
   },
