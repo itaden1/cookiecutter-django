@@ -9,7 +9,7 @@
     {% endif -%}
     "browser-sync": "^2.14.0",
     "del": "^2.2.2",
-    "gulp": "^3.9.1",
+    "gulp": "^4.0.0",
     "gulp-autoprefixer": "^5.0.0",
     {% if cookiecutter.custom_bootstrap_compilation == 'y' -%}
     "gulp-concat": "^2.6.1",
@@ -26,7 +26,6 @@
     "jquery": "3.3.1",
     "popper.js": "1.14.3",
     {% endif -%}
-    "run-sequence": "^2.1.1"
     {%- endif %}
   },
   "engines": {

@@ -20,8 +20,7 @@ var gulp = require('gulp'),
       uglify = require('gulp-uglify'),
       imagemin = require('gulp-imagemin'),
       spawn = require('child_process').spawn,
-      runSequence = require('run-sequence'),
-      browserSync = require('browser-sync').create(),
+      browserSync = require('browser-sync').create();
       reload = browserSync.reload;
 
 
@@ -105,6 +104,7 @@ gulp.task('imgCompression', function(){
     .pipe(gulp.dest(paths.images))
 });
 
+{% if cookiecutter.use_docker == 'n' %}
 // Run django server
 gulp.task('runServer', function(cb) {
   var cmd = spawn('python', ['manage.py', 'runserver'], {stdio: 'inherit'});
@@ -113,26 +113,22 @@ gulp.task('runServer', function(cb) {
     cb(code);
   });
 });
+{% endif %}
 
-// Browser sync server for live reload
-gulp.task('browserSync', function() {
+// combined watch/browsersync
+gulp.task('serve', function(){
     browserSync.init(
-      [paths.css + "/*.css", paths.js + "*.js", paths.templates + '*.html'], {
-        proxy:  "localhost:8000"
+      [paths.css + "/*.css", paths.js + "/*.js", paths.templates + '/*.html'], {
+        proxy:  "0.0.0.0:8000"
     });
-});
-
-// Watch
-gulp.task('watch', function() {
-
-  gulp.watch(paths.sass + '/*.scss', ['styles']);
-  gulp.watch(paths.js + '/*.js', ['scripts']).on("change", reload);
-  gulp.watch(paths.images + '/*', ['imgCompression']);
+  gulp.watch(paths.sass + '/*.scss', gulp.series('styles'));
+  gulp.watch(paths.css + '/*.css').on("change", reload);
+  gulp.watch(paths.js + '/*.js', gulp.series('scripts')).on("change", reload);
+  gulp.watch(paths.images + '/*', gulp.series('imgCompression'));
   gulp.watch(paths.templates + '/**/*.html').on("change", reload);
+ });
 
-});
 
 // Default task
-gulp.task('default', function() {
-    runSequence(['styles', 'scripts', {% if cookiecutter.custom_bootstrap_compilation == 'y' %}'vendor-scripts', {% endif %}'imgCompression'], ['runServer', 'browserSync', 'watch']);
-});
+gulp.task('default', gulp.series(['styles', 'scripts', {% if cookiecutter.custom_bootstrap_compilation == 'y' %}'vendor-scripts', {% endif %}'imgCompression', 'serve']));
+
