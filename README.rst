@@ -1,4 +1,10 @@
-Cookiecutter Django
+Cookiecutter Django (with Vue JS)
+=======================
+This is a fork of pydanny's[cookiecutter-django](https://github.com/pydanny/cookiecutter-django). 
+It includesd these additional features.
+* Vujs basic app (built using vuecli)
+* Replacement of Bootstrap Jquery with [bootstrap native ](https://github.com/thednp/bootstrap.native)
+All other functionality is fully attributed to the above project and its creators, please refer to the associated documentation there.
 =======================
 
 .. image:: https://travis-ci.org/pydanny/cookiecutter-django.svg?branch=master

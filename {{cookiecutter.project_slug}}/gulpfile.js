@@ -33,9 +33,7 @@ var pathsConfig = function (appName) {
     {% if cookiecutter.custom_bootstrap_compilation == 'y' %}
     bootstrapSass: vendorsRoot + '/bootstrap/scss',
     vendorsJs: [
-      vendorsRoot + 'jquery/dist/jquery.slim.js',
-      vendorsRoot + 'popper.js/dist/umd/popper.js',
-      vendorsRoot + 'bootstrap/dist/js/bootstrap.js'
+      this.app + '/static/js/vendor/bootstrap-native-v4.js'
     ],
     {% endif %}
     app: this.app,
@@ -115,11 +113,14 @@ gulp.task('runServer', function(cb) {
 });
 {% endif %}
 
+// To use gulp alongside docker run the Docker container in 1 terminal, then run gulp in another.
+// In the below configuration browsersync will proxy to the docker container at 0.0.0.0:8000
+
 // combined watch/browsersync
 gulp.task('serve', function(){
     browserSync.init(
       [paths.css + "/*.css", paths.js + "/*.js", paths.templates + '/*.html'], {
-        proxy:  "0.0.0.0:8000"
+        proxy:  {% if cookiecutter.use_docker == 'y' %}"0.0.0.0:8000"{% else %}"localhost:8000"{% endif %}
     });
   gulp.watch(paths.sass + '/*.scss', gulp.series('styles'));
   gulp.watch(paths.css + '/*.css').on("change", reload);
